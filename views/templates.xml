@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <template id="assets_prism_js" inherit_id="web.assets_frontend">
+          <xpath expr="." position="inside">
+            <link href="/tecnopti/static/lib/prism.css" rel="stylesheet" type="text/css"/>
+            <script src="/tecnopti/static/lib/prism.js" type="text/JavaScript" />
+          </xpath>
+        </template>
+        <template id="assets_prism_js_backend" inherit_id="web.assets_backend">
+          <xpath expr="." position="inside">
+            <link href="/tecnopti/static/lib/prism.css" rel="stylesheet" type="text/css"/>
+            <script src="/tecnopti/static/lib/prism.js" type="text/JavaScript" />
+          </xpath>
+        </template>
+    </data>
+</odoo>
