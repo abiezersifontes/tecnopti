@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+    <record id="tecnopti_website_blog_cover" model='ir.ui.view'>
+      <field name="inherit_id" ref="website_blog.blog_cover"/>
+      <field name="arch" type="xml">
+        <xpath expr="//div[@class='o_blog_cover_component o_blog_cover_image']" position="replace">
+          <t t-if="p">
+            <t t-if="p.img_blog">
+              <img t-att-src="'data:image/png;base64,%s' % to_text(p.img_blog)" width="100px" height="100px"/>
+            </t>
+          </t>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
