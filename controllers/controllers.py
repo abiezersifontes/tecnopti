@@ -2,9 +2,9 @@
 from odoo import http
 
 # class Tecnopti(http.Controller):
-#     @http.route('/tecnopti/tecnopti/', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+#    @http.route('/tecnopti/', auth='user')
+#    def index(self, **kw):
+#        return "Hello, world"
 
 #     @http.route('/tecnopti/tecnopti/objects/', auth='public')
 #     def list(self, **kw):

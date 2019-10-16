@@ -1,0 +1,12 @@
+<odoo>
+  <data>
+    <record id="tecnopti_website_company_form" model="ir.ui.view">
+      <field name="inherit_id" ref="portal.portal_my_home"/>
+      <field name="arch" type="xml">
+        <xpath expr="//div[@class='o_portal_my_home']" position="after">
+              <a t-att-href="base_url" class="btn btn-success"> Create Company <i class="fa fa-pencil"></i></a>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

@@ -19,15 +19,16 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','website_blog'],
+    'depends': ['base','website_blog','portal'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
         'views/website_blog_post.xml',
         'views/website_blog_cover_template.xml',
+        'views/tecnopti_website_base_view_company_form.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
