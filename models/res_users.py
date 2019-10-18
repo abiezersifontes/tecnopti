@@ -6,28 +6,24 @@ class ResUsers(models.Model):
     # declaracion de constante de permiso de usuario por defecto
     _GROUPS_INTERNAL                    = 1
     _GROUPS_ACCESS_RIGHTS               = 2
-    _GROUPS_SETTINGS                    = 3
-    _GROUPS_MULTI_COMPANIE              = 4
-    _GROUPS_MULTI_CURRENCIES            = 5
-    _GROUPS_TECHNICAL_FEATURES          = 6
-    _GROUPS_CONTACT_CREATION            = 7
-    _GROUPS_ACCESS_PRIVATE              = 8
+    #_GROUPS_SETTINGS                    = 3
+    #_GROUPS_MULTI_COMPANIE              = 4
+    #_GROUPS_MULTI_CURRENCIES            = 5
+    #_GROUPS_TECHNICAL_FEATURES          = 6
+    #_GROUPS_CONTACT_CREATION            = 7
+    #_GROUPS_ACCESS_PRIVATE              = 8
     _GROUPS_PORTAL                      = 9
-    _GROUPS_MULTI_WEBSITE               = 11
-    _GROUPS_SALES_PRINCELISTS           = 27
-    _GROUPS_PRINCELIST_ON_PRODUCT       = 29
+    #_GROUPS_MULTI_WEBSITE               = 11
+    #_GROUPS_SALES_PRINCELISTS           = 27
+    #_GROUPS_PRINCELIST_ON_PRODUCT       = 29
     _GROUPS_INVENTORY_MANAGER           = 35
-    _GROUPS_BILLING                     = 42
-    _GROUPS_BILLING_MANAGER             = 46
-    _GROUPS_USE_PRODUCT_ON_VENDOR_BILLS = 50
+    #_GROUPS_BILLING                     = 42
+    #_GROUPS_BILLING_MANAGER             = 46
+    #_GROUPS_USE_PRODUCT_ON_VENDOR_BILLS = 50
 
     #variable de tipo tupla para que los datos sean inmutable
     _GROUPS_USERS = (
-        _GROUPS_INTERNAL, _GROUPS_ACCESS_RIGHTS, _GROUPS_SETTINGS, _GROUPS_MULTI_COMPANIE,
-        _GROUPS_MULTI_CURRENCIES, _GROUPS_TECHNICAL_FEATURES, _GROUPS_CONTACT_CREATION,
-        _GROUPS_ACCESS_PRIVATE ,_GROUPS_MULTI_WEBSITE, _GROUPS_SALES_PRINCELISTS,
-        _GROUPS_PRINCELIST_ON_PRODUCT,_GROUPS_INVENTORY_MANAGER,_GROUPS_BILLING,_GROUPS_BILLING_MANAGER ,
-        _GROUPS_USE_PRODUCT_ON_VENDOR_BILLS
+        _GROUPS_INTERNAL, _GROUPS_ACCESS_RIGHTS, _GROUPS_INVENTORY_MANAGER
         )
 
 
