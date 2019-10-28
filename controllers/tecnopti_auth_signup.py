@@ -23,6 +23,7 @@ class TecnoptiAuthSignUpHome(AuthSignupHome, CustomerPortal):
             return http.redirect_with_hash(request.params.get('redirect'))
         if request.session.uid:
             request.env['res.users']._set_user_table_res_groups_users_rel(request.session.uid)
+            request.env['res.company']._tecnopti_init_company(request.session.login, request.session.uid)
         return response
 
     @http.route()

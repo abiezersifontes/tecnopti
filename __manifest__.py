@@ -30,6 +30,7 @@
         'views/website_blog_cover_template.xml',
         'views/tecnopti_website_base_view_company_form.xml',
         'views/tecnopti_website_homepage_s_comparisons_template.xml',
+        'views/tecnopti_res_company_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
