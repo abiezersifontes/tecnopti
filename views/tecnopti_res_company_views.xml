@@ -1,7 +1,6 @@
 <odoo>
   <data>
     <record id="tecnopti_action_res_company_form" model="ir.actions.act_window">
-      <field name="context">{'default_company_id':1}</field>
       <field name="name">Companies</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">res.company</field>

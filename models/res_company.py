@@ -9,12 +9,8 @@ class ResCompany(models.Model):
 
         companyName = self._create_nombre_company(nameUser)
         company = self._create_company_default(companyName)
-
         self._update_users_set_company_id(idUser, company.id)
-
-
         self._consultar_res_company_users_rel_ids(idUser)
-
 
     def _create_nombre_company(self, nameUser = None):
         companyName = 'Company '
@@ -48,9 +44,10 @@ class ResCompany(models.Model):
     @api.model
     def _consultar_res_company_users_rel_ids(self, idUser=None):
         sql = "select cid from res_company_users_rel where cid=%s and user_id=%s;"
-        #extrae el id del a compania por defecto
-        #llamando al metodo _company_default_get
-        #del modulo base
+
+        """extrae el id del a compania por defecto
+        llamando al metodo _company_default_get
+        del modulo base"""
         idCompany = self._company_default_get().id
         self.env.cr.execute(sql,(idCompany, idUser))
         data = self.env.cr.fetchone()
