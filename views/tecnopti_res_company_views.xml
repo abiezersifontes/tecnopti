@@ -1,20 +1,12 @@
 <odoo>
   <data>
     <record id="tecnopti_action_res_company_form" model="ir.actions.act_window">
-      <field name="name">Companies</field>
-      <field name="type">ir.actions.act_window</field>
-      <field name="res_model">res.company</field>
-      <field name="view_type">form</field>
-      <field name="view_mode">tree,kanban,form</field>
-      <field name="help" type="html">
-        <p class="o_view_nocontent_smiling_face">
-          Create a new company
-        </p><p>
-          Create and manage the companies that will be managed by Odoo from here. Shops or subsidiaries can be created and maintained from here.
-        </p>
-      </field>
-      <field name="domain">[('user_ids.id', '=', uid)]</field>
-      <field name="inherit_id" ref="base.action_res_company_form"/>
+        <field name="inherit_id" ref="base.action_res_company_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='help']" position="before">
+            <field name="domain">[('user_ids.id', '=', uid)]</field>
+          </xpath>
+        </field>
     </record>
   </data>
 </odoo>
