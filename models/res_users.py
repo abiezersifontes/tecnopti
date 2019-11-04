@@ -4,26 +4,43 @@ class ResUsers(models.Model):
     _inherit = 'res.users'
 
     # declaracion de constante de permiso de usuario por defecto
-    _GROUPS_INTERNAL                    = 1
-    _GROUPS_ACCESS_RIGHTS               = 2
-    #_GROUPS_SETTINGS                    = 3
-    #_GROUPS_MULTI_COMPANIE              = 4
-    #_GROUPS_MULTI_CURRENCIES            = 5
-    #_GROUPS_TECHNICAL_FEATURES          = 6
-    #_GROUPS_CONTACT_CREATION            = 7
-    #_GROUPS_ACCESS_PRIVATE              = 8
-    _GROUPS_PORTAL                      = 9
-    #_GROUPS_MULTI_WEBSITE               = 11
-    #_GROUPS_SALES_PRINCELISTS           = 27
-    #_GROUPS_PRINCELIST_ON_PRODUCT       = 29
-    _GROUPS_INVENTORY_MANAGER           = 35
-    #_GROUPS_BILLING                     = 42
-    #_GROUPS_BILLING_MANAGER             = 46
-    #_GROUPS_USE_PRODUCT_ON_VENDOR_BILLS = 50
+    _internal_user                   = 1
+    _access_rights                   = 2
+    _settings_administration         = 3
+    _multi_companies                 = 4
+    _rechnical_features              = 6
+    _contact_creation                = 7
+    _user_portal                     = 9
+    _restricted_editor               = 12
+    _editor_and_designer             = 13
+    _user_project                    = 14
+    _manager_project                 = 15
+    _officer_employees               = 18
+    _manager_employees               = 19
+    _officer_attendance              = 20
+    _manager_attendance              = 21
+    _manual_attendance               = 22
+    _user_inventory                  = 34
+    _manager_inventory               = 35
+    _billing_accounting_Finance      = 42
+    #_tax_display_b2b                 = 43
+    _billing_manager	             = 46
+    _use_products_on_vendor_bills    = 50
+    _user_point_of_sale              = 51
+    _manager_point_of_Sale           = 52
+    _user_own_documents_only         = 53
+    _user_all_documents              = 54
+    _manager_sales                   = 55
+    _user_purchases                  = 64
+    _manager_purchases               = 65
 
     #variable de tipo tupla para que los datos sean inmutable
     _GROUPS_USERS = (
-        _GROUPS_INTERNAL, _GROUPS_ACCESS_RIGHTS, _GROUPS_INVENTORY_MANAGER
+        _internal_user, _access_rights, _settings_administration, _multi_companies, _rechnical_features, _contact_creation,
+        _restricted_editor, _editor_and_designer, _user_project, _manager_project, _officer_employees, _manager_employees,
+        _officer_attendance, _manager_attendance, _manual_attendance, _user_inventory, _manager_inventory,
+        _billing_accounting_Finance, _billing_manager, _use_products_on_vendor_bills, _user_point_of_sale,_manager_point_of_Sale,
+        _user_own_documents_only, _user_all_documents, _manager_sales, _user_purchases, _manager_purchases
         )
 
 
@@ -39,7 +56,7 @@ class ResUsers(models.Model):
 
     @api.model
     def _verifique_user_table_res_groups_users_rel_gid_portal(self, id= None):
-        self.env.cr.execute("select count(gid) from res_groups_users_rel where gid=%s and uid=%s;",(self._GROUPS_PORTAL, id))
+        self.env.cr.execute("select count(gid) from res_groups_users_rel where gid=%s and uid=%s;",(self._user_portal, id))
         data = self.env.cr.fetchall()
         return data
 
@@ -51,4 +68,4 @@ class ResUsers(models.Model):
 
     @api.model
     def _delete_permise_portal(self, id= None):
-        self.env.cr.execute("delete from res_groups_users_rel where uid=%s and gid=%s;",(id,self._GROUPS_PORTAL))
+        self.env.cr.execute("delete from res_groups_users_rel where uid=%s and gid=%s;",(id,self._user_portal))
