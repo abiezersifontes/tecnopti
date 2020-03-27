@@ -7,6 +7,7 @@ from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.addons.web.controllers.main import ensure_db
 from odoo.http import request
 from odoo.exceptions import UserError
+_logger = logging.getLogger(__name__)
 
 class TecnoptiAuthSignUpHome(AuthSignupHome):
 
@@ -21,6 +22,7 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
         # y ejecuta los permisos de usuarios necesarios y crea la compañia
         if request.session.uid and request.session.user_tecnopti:
             request.session['user_tecnopti'] = False
+
             self._register_default_company_of_user(request.session.login, request.session.uid)
 
         if request.httprequest.method == 'GET' and request.session.uid and request.params.get('redirect'):
@@ -68,6 +70,8 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
 
     def _register_default_company_of_user(self,user_login=None,user_id=None):
-
-        request.env['res.users']._set_user_table_res_groups_users_rel(user_id)
+        """ _Establece Permisos para que pueda ser creada una compañia
+        no son necesarios siempre y cuando la plantilla de usuario """
+        # request.env['res.users']._set_user_table_res_groups_users_rel(user_id)
+        """ Se crea la Compañia """
         request.env['res.company']._tecnopti_init_company(user_login, user_id)
