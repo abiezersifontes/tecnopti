@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+    <record id="group_plan_user" model="res.groups">
+      <field name="name">Plan User</field>
+      <field name="category_id" ref="base.module_category_administration"/>
+      <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/>
+      <!-- <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]"/> -->
+    </record>
+
+    <record id="only_own_company" model="ir.rule">
+      <field name="name">only own company</field>
+      <field ref="base.model_res_company" name="model_id"/>
+      <field name="domain_force">['|',('id','=',user.company_ids[0].id),('id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.group_plan_user'))]"/>
+    </record>
+
+  </data>
+</odoo>
