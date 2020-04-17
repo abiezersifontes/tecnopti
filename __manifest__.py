@@ -23,8 +23,8 @@
 
     # always loaded
     'data': [
+        'security/record_rules.xml',
         'security/ir.model.access.csv',
-        "security/record_rules.xml",
         'views/templates.xml',
         'views/website_blog_post.xml',
         'views/website_blog_cover_template.xml',
@@ -35,4 +35,5 @@
     'demo': [
         'demo/demo.xml',
     ],
+    'application': True,
 }

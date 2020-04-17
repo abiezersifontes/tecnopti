@@ -23,18 +23,35 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
         if request.session.uid and request.session.user_tecnopti:
             request.session['user_tecnopti'] = False
 
+            """
+            Añadir Usuario a Grupo de Ajustess
+            """
+            #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
+            group_id = request.env['ir.model.data'].get_object('base', 'group_system')
+            group_id.sudo().write({'users': [(4, request.session.uid)]})
+            request.env.cr.commit()
+
             self._register_default_company_of_user(request.session.login, request.session.uid)
+
+            """
+            Sacar al usuario de los grupos de Ajustes y Perisos de Acceso
+            """
+            #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
+            group_id.sudo().write({'users': [(3, request.session.uid)]})
+            group_id_manager = request.env['ir.model.data'].get_object('base', 'group_erp_manager')
+            group_id_manager.sudo().write({'users': [(3, request.session.uid)]})
+            request.env.cr.commit()
 
         if request.httprequest.method == 'GET' and request.session.uid and request.params.get('redirect'):
             # Redirect if already logged in and redirect param is present
             return http.redirect_with_hash(request.params.get('redirect'))
-        return super(TecnoptiAuthSignUpHome, self).web_login(*args, **kw)
+        # return super(TecnoptiAuthSignUpHome, self).web_login(*args, **kw)
+        return response
 
     @http.route()
     def web_auth_signup(self, *args, **kw):
 
         qcontext = self.get_auth_signup_qcontext()
-
         if not qcontext.get('token') and not qcontext.get('signup_enabled'):
             raise werkzeug.exceptions.NotFound()
 
@@ -72,6 +89,9 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
     def _register_default_company_of_user(self,user_login=None,user_id=None):
         """ _Establece Permisos para que pueda ser creada una compañia
         no son necesarios siempre y cuando la plantilla de usuario """
+
         # request.env['res.users']._set_user_table_res_groups_users_rel(user_id)
         """ Se crea la Compañia """
         request.env['res.company']._tecnopti_init_company(user_login, user_id)
+
+        return True
