@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 import werkzeug
+import re
+
 from odoo import http,_
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.addons.auth_signup.models.res_users import SignupError
@@ -10,7 +12,6 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 class TecnoptiAuthSignUpHome(AuthSignupHome):
-
 
     @http.route()
     def web_login(self, *args, **kw):
@@ -22,76 +23,53 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
         # y ejecuta los permisos de usuarios necesarios y crea la compañia
         if request.session.uid and request.session.user_tecnopti:
             request.session['user_tecnopti'] = False
+            if request.session.company:
+                company = request.session.company
+            else:
+                company = None
+            self._register_default_company_of_user(request.session.login, request.session.uid,company)
 
-            """
-            Añadir Usuario a Grupo de Ajustess
-            """
-            #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
-            group_id = request.env['ir.model.data'].get_object('base', 'group_system')
-            group_id.sudo().write({'users': [(4, request.session.uid)]})
-            request.env.cr.commit()
-
-            self._register_default_company_of_user(request.session.login, request.session.uid)
-
-            """
-            Sacar al usuario de los grupos de Ajustes y Perisos de Acceso
-            """
-            #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
-            group_id.sudo().write({'users': [(3, request.session.uid)]})
-            group_id_manager = request.env['ir.model.data'].get_object('base', 'group_erp_manager')
-            group_id_manager.sudo().write({'users': [(3, request.session.uid)]})
-            request.env.cr.commit()
-
-        if request.httprequest.method == 'GET' and request.session.uid and request.params.get('redirect'):
-            # Redirect if already logged in and redirect param is present
-            return http.redirect_with_hash(request.params.get('redirect'))
-        # return super(TecnoptiAuthSignUpHome, self).web_login(*args, **kw)
         return response
 
     @http.route()
     def web_auth_signup(self, *args, **kw):
-
-        qcontext = self.get_auth_signup_qcontext()
-        if not qcontext.get('token') and not qcontext.get('signup_enabled'):
-            raise werkzeug.exceptions.NotFound()
-
-        if 'error' not in qcontext and request.httprequest.method == 'POST':
-            try:
-                self.do_signup(qcontext)
-                # Send an account creation confirmation email
-                if qcontext.get('token'):
-                    user_sudo = request.env['res.users'].sudo().search([('login', '=', qcontext.get('login'))])
-                    template = request.env.ref('auth_signup.mail_template_user_signup_account_created', raise_if_not_found=False)
-                    if user_sudo and template:
-                        template.sudo().with_context(
-                            lang=user_sudo.lang,
-                            auth_login=werkzeug.url_encode({'auth_login': user_sudo.email}),
-                        ).send_mail(user_sudo.id, force_send=True)
-                """creando una variable de session
-                 para utilizarla como bandera en
-                 los filtros del metodo login """
-                request.session['user_tecnopti'] = True
-                return self.web_login(*args, **kw)
-            except UserError as e:
-                qcontext['error'] = e.name or e.value
-            except (SignupError, AssertionError) as e:
-                if request.env["res.users"].sudo().search([("login", "=", qcontext.get("login"))]):
-                    qcontext["error"] = _("Another user is already registered using this email address.")
-                else:
-                    _logger.error("%s", e)
-                    qcontext['error'] = _("Could not create a new account.")
-
-        #response = request.render('auth_signup.signup', qcontext)
-        #esponse.headers['X-Frame-Options'] = 'DENY'
-        return super(TecnoptiAuthSignUpHome, self).web_auth_signup(*args, **kw)
+        request.session['user_tecnopti'] = True
+        if super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company'):
+            request.session['company'] = super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company')
+        resp = super(TecnoptiAuthSignUpHome, self).web_auth_signup(*args, **kw)
+        return resp
 
 
-    def _register_default_company_of_user(self,user_login=None,user_id=None):
+    def get_auth_signup_qcontext(self):
+        qcontext = super(TecnoptiAuthSignUpHome,self).get_auth_signup_qcontext()
+        if qcontext.get('login'):
+            if not bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", qcontext.get("login"))):
+                qcontext['error'] = _("invalid email format")
+
+        return qcontext
+
+
+    def _register_default_company_of_user(self,user_login=None,user_id=None,Company=None):
         """ _Establece Permisos para que pueda ser creada una compañia
         no son necesarios siempre y cuando la plantilla de usuario """
-
+        """
+        Añadir Usuario a Grupo de Ajustess
+        """
+        #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
+        group_id = request.env['ir.model.data'].get_object('base', 'group_system')
+        group_id.sudo().write({'users': [(4, request.session.uid)]})
+        request.env.cr.commit()
         # request.env['res.users']._set_user_table_res_groups_users_rel(user_id)
         """ Se crea la Compañia """
-        request.env['res.company']._tecnopti_init_company(user_login, user_id)
+        request.env['res.company']._tecnopti_init_company(user_login, user_id,Company)
+
+        """
+        Sacar al usuario de los grupos de Ajustes y Perisos de Acceso
+        """
+        #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
+        group_id.sudo().write({'users': [(3, request.session.uid)]})
+        group_id_manager = request.env['ir.model.data'].get_object('base', 'group_erp_manager')
+        group_id_manager.sudo().write({'users': [(3, request.session.uid)]})
+        request.env.cr.commit()
 
         return True

@@ -8,10 +8,7 @@
       <field name="category_id" ref="base.module_category_administration"/>
       <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/>
       <field name="menu_access" eval="[(4, ref('base.menu_administration'))]"/>
-    </record>
-
-    <record model="res.groups" id="base.group_erp_manager">
-      <field name="implied_ids" eval="[(4, ref('tecnopti.group_plan_user'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 
     <record id="only_own_company" model="ir.rule">

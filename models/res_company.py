@@ -7,39 +7,16 @@ class ResCompany(models.Model):
     _inherit = 'res.company'
 
     @api.model
-    def _tecnopti_init_company(self,nameUser=None, idUser=None):
-        # if idUser != None:
-        #     _logger.warning("###################################################################")
-        #     _logger.warning(self.env['res.users'].search([('id','=',self.env.uid)]).groups_id)
-        #     _logger.warning("###################################################################")
-        #
-        #     group_id = self.env['ir.model.data'].get_object('base', 'group_system')
-        #     group_id.sudo().write({'users': [(4, self.env.uid)]})
-        #     self.env.cr.commit()
-        #
-        #     _logger.warning("###################################################################")
-        #     _logger.warning(self.env['res.users'].search([('id','=',self.env.uid)]).groups_id)
-        #     _logger.warning("###################################################################")
+    def _tecnopti_init_company(self,nameUser=None, idUser=None,Company=None):
 
+        if Company != None and Company != '':
+            companyName = Company
+        else:
+            companyName = self._create_nombre_company(nameUser)
 
-        companyName = self._create_nombre_company(nameUser)
         company = self._create_company_default(companyName)
         self._update_users_set_company_id(idUser, company.id)
         self._consultar_res_company_users_rel_ids(idUser)
-
-        # if idUser != None:
-        #     _logger.warning("###################################################################")
-        #     _logger.warning(self.env['res.users'].search([('id','=',self.env.uid)]).groups_id)
-        #     _logger.warning("###################################################################")
-        #
-        #     group_id = self.env['ir.model.data'].get_object('base', 'group_system')
-        #     group_id.users.search([('id','in',[self.env.uid])]).unlink()
-        #     self.env.cr.commit()
-        #
-        #     _logger.warning("###################################################################")
-        #     _logger.warning(self.env['res.users'].search([('id','=',self.env.uid)]).groups_id)
-        #     _logger.warning("###################################################################")
-
 
     def _create_nombre_company(self, nameUser = None):
         companyName = 'Company '
@@ -82,7 +59,6 @@ class ResCompany(models.Model):
         data = self.env.cr.fetchone()
         if len(data) == 1:
             self._delete_res_company_user_rel(idCompany, idUser)
-
 
 
     @api.model

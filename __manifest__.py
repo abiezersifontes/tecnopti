@@ -19,11 +19,19 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','website_blog','portal','website','auth_signup','web'],
+    'depends': [
+        'base',
+        'web',
+        'website',
+        'website_blog',
+        'portal',
+        'auth_signup',
+    ],
 
     # always loaded
     'data': [
         'security/record_rules.xml',
+        'security/group_erp_manager.xml',
         'security/ir.model.access.csv',
         'views/templates.xml',
         'views/website_blog_post.xml',
@@ -34,6 +42,8 @@
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
+    ],
+    'qweb':[
     ],
     'application': True,
 }

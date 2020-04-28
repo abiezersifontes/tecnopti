@@ -16,3 +16,5 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 "access_tecnopti_barcode_rule","tecnopti_barcode_rule","barcodes.model_barcode_rule","group_plan_user",1,1,1,1
 "access_tecnopti_digest","tecnopti_digest","digest.model_digest_digest","group_plan_user",1,1,1,1
 "access_tecnopti_tip","tecnopti_tip","digest.model_digest_tip","group_plan_user",1,1,1,1
+"access_tecnopti_crm_team","tecnopti_crm_team","sales_team.model_crm_team","group_plan_user",1,1,1,1
+"access_tecnopti_sales_team","tecnopti_sales_team","sale.model_sale_order","group_plan_user",1,1,1,1
