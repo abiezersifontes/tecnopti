@@ -21,18 +21,26 @@
     # any module necessary for this one to work correctly
     'depends': [
         'base',
+        'stock',
         'web',
         'website',
         'website_blog',
         'portal',
         'auth_signup',
+        'event',
+        'point_of_sale',
+        'project',
+        'sale',
+        'account',
+        'purchase',
+        'delivery',
     ],
 
     # always loaded
     'data': [
-        'security/record_rules.xml',
         'security/group_erp_manager.xml',
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'views/templates.xml',
         'views/website_blog_post.xml',
         'views/website_blog_cover_template.xml',

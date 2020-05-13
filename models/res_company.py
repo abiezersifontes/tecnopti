@@ -1,41 +1,36 @@
 import logging
 from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
+from odoo.addons.base.models.res_company import Company
 
 class ResCompany(models.Model):
 
     _inherit = 'res.company'
 
     @api.model
-    def _tecnopti_init_company(self,nameUser=None, idUser=None,Company=None):
+    def _tecnopti_init_company(self,nameUser=None, idUser=None,companyName=None):
 
-        if Company != None and Company != '':
-            companyName = Company
-        else:
-            companyName = self._create_nombre_company(nameUser)
-
-        company = self._create_company_default(companyName)
+        company = self._create_company_default(companyName,nameUser)
         self._update_users_set_company_id(idUser, company.id)
         self._consultar_res_company_users_rel_ids(idUser)
-
-    def _create_nombre_company(self, nameUser = None):
-        companyName = 'Company '
-        if nameUser:
-            companyName += nameUser.capitalize()
-        return companyName
+        self.env['website'].sudo().create({'name':company.name,'company_id':company.id})
 
     @api.model
-    def _create_company_default(self, companyName = None):
+    def _create_company_default(self, companyName=None, nameUser=None):
+
+        if companyName == None or companyName == '':
+            companyName = 'Company '+nameUser.capitalize()
+
         # llamando  al metodo create del model company del modulo base
         # el cual crea una compania
-        company = self.create({'name': companyName})
+        company = self.sudo().create({'name': companyName,'un_user_id':self.env.user.id})
         return company
 
     @api.model
     def _update_users_set_company_id(self, idUser=None, idCompany=None):
-        usuario = self.env['res.users'].search([('id', '=', idUser)])
+        usuario = self.sudo().env['res.users'].search([('id', '=', idUser)])
         idPartner = usuario.partner_id.id
-        usuario.write({'company_id':idCompany})
+        usuario.write({'company_id':idCompany,'company_ids':[(6,0,[int(idCompany)])]})
 
         self._update_res_partner_company_id(idPartner,idCompany)
 
@@ -59,7 +54,6 @@ class ResCompany(models.Model):
         data = self.env.cr.fetchone()
         if len(data) == 1:
             self._delete_res_company_user_rel(idCompany, idUser)
-
 
     @api.model
     def _delete_res_company_user_rel(self,idCompany=None,idUser=None):

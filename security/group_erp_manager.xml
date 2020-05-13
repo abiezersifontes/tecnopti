@@ -1,14 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-    
+
+    <!-- Permisos Ajustes -->
+    <record id="settings_plan_a" model="res.groups">
+      <field name="name">Ajustes Plan A</field>
+      <field name="menu_access" eval="[(4, ref('base.menu_administration'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupos website -->
+    <record id="website.group_website_publisher" model="res.groups">
+      <field name="name">Restricted Editor</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="website.group_website_designer" model="res.groups">
+      <field name="name">Editor and Designer</field>
+      <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+      <field name="implied_ids" eval="[(4, ref('website.group_website_publisher'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Sitio Web -->
+    <record id="website_plan_a" model="res.groups">
+      <field name="name">Sitio web Plan A</field>
+      <field name="implied_ids" eval="[(4, ref('website.group_website_publisher'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Punto de Venta -->
+    <record id="pos_plan_a" model="res.groups">
+      <field name="name">Punto de Venta Plan A</field>
+      <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_manager'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Eventos -->
+    <record id="event_plan_a" model="res.groups">
+      <field name="name">Eventos Plan A</field>
+      <!-- <field name="implied_ids" eval="[(4, ref('event.group_event_manager'))]"/> -->
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Compras -->
+    <record id="purchase_plan_a" model="res.groups">
+      <field name="name">Compras Plan A</field>
+      <!-- <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/> -->
+      <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_manager'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Facturacion y Contabilidad -->
+    <record id="account_plan_a" model="res.groups">
+      <field name="name">Facturacion Plan A</field>
+      <!-- <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/> -->
+      <field name="implied_ids" eval="[(4, ref('account.group_account_manager'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Inventario -->
+    <record id="stock_plan_a" model="res.groups">
+      <field name="name">Inventario Plan A</field>
+      <!-- <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/> -->
+      <field name="implied_ids" eval="[(4, ref('stock.group_stock_manager'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo de Permisos Proyecto -->
+    <record id="project_plan_a" model="res.groups">
+      <field name="name">Proyecto Plan A</field>
+      <!-- <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/> -->
+      <field name="implied_ids" eval="[(4, ref('project.group_project_manager'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="sale_plan_a" model="res.groups">
+      <field name="name">Ventas Plan A</field>
+      <!-- <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/> -->
+      <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_manager'))]"/>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
     <record model="res.groups" id="base.group_erp_manager">
-      <field name="implied_ids" eval="[(4, ref('tecnopti.group_plan_user'))]"/>
+      <!-- <field name="implied_ids" eval="[(4, ref('tecnopti.settings_plan_a'))]"/> -->
       <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 
     <record model="res.groups" id="base.group_system">
+      <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]"/>
+      <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
       <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+
+    <record id="base.template_portal_user_id" model="res.users">
+        <field name="name">Portal User Template</field>
+        <field name="login">portaltemplate</field>
+        <field name="active" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [
+          ref('base.group_user'),
+          ref('tecnopti.settings_plan_a'),
+          ref('tecnopti.pos_plan_a'),
+          ref('tecnopti.purchase_plan_a'),
+          ref('tecnopti.account_plan_a'),
+          ref('tecnopti.stock_plan_a'),
+          ref('tecnopti.project_plan_a'),
+          ref('tecnopti.sale_plan_a'),
+          ref('tecnopti.website_plan_a'),
+          ref('tecnopti.event_plan_a')
+          ])]"/>
     </record>
 
   </data>

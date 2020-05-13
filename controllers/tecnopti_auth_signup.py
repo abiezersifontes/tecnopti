@@ -33,9 +33,9 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
     @http.route()
     def web_auth_signup(self, *args, **kw):
-        request.session['user_tecnopti'] = True
         if super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company'):
             request.session['company'] = super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company')
+            request.session['user_tecnopti'] = True
         resp = super(TecnoptiAuthSignUpHome, self).web_auth_signup(*args, **kw)
         return resp
 
@@ -50,26 +50,6 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
 
     def _register_default_company_of_user(self,user_login=None,user_id=None,Company=None):
-        """ _Establece Permisos para que pueda ser creada una compañia
-        no son necesarios siempre y cuando la plantilla de usuario """
-        """
-        Añadir Usuario a Grupo de Ajustess
-        """
-        #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
-        group_id = request.env['ir.model.data'].get_object('base', 'group_system')
-        group_id.sudo().write({'users': [(4, request.session.uid)]})
-        request.env.cr.commit()
-        # request.env['res.users']._set_user_table_res_groups_users_rel(user_id)
         """ Se crea la Compañia """
         request.env['res.company']._tecnopti_init_company(user_login, user_id,Company)
-
-        """
-        Sacar al usuario de los grupos de Ajustes y Perisos de Acceso
-        """
-        #TODO: Crear un metodo que quite y añada permisiso solo pasandole el nombre de esos permisos
-        group_id.sudo().write({'users': [(3, request.session.uid)]})
-        group_id_manager = request.env['ir.model.data'].get_object('base', 'group_erp_manager')
-        group_id_manager.sudo().write({'users': [(3, request.session.uid)]})
-        request.env.cr.commit()
-
         return True

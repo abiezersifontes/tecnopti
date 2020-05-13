@@ -1,22 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
   <data>
 
-    <record id="group_plan_user" model="res.groups">
-      <field name="name">Permisos de Acceso Plan A</field>
-      <field name="category_id" ref="base.module_category_administration"/>
-      <field name="users" eval="[(4, ref('base.template_portal_user_id'))]"/>
-      <field name="menu_access" eval="[(4, ref('base.menu_administration'))]"/>
-      <field name="category_id" ref="base.module_category_hidden"/>
+    <menuitem name="Website"
+    id="website.menu_website_configuration"
+    sequence="9"
+    groups="base.user_root,base.user_admin"
+    web_icon="website,static/description/icon.png"/>
+
+
+    <record id="website.menu_website_configuration" model="ir.ui.menu">
+      <field name="groups_id" eval="[(3,ref('base.group_user'))]"/>
+    </record>
+
+    <!-- <record id="only_own_wesite" model="ir.rule">
+      <field name="name">only own website</field>
+      <field ref="website.model_website" name="model_id"/>
+      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
+    </record>
+
+    <record id="only_own_menu" model="ir.rule">
+      <field name="name">only own menu</field>
+      <field ref="website.model_website_menu" name="model_id"/>
+      <field name="domain_force">['|',('website_id.company_id.id','=',user.company_id.id),('website_id.company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
+    </record>
+
+    <record id="only_own_blog" model="ir.rule">
+      <field name="name">only own blog</field>
+      <field ref="website_blog.model_blog_blog" name="model_id"/>
+      <field name="domain_force">['|',('website_id.company_id.id','=',user.company_id.id),('website_id.company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
+    </record>
+
+    <record id="only_own_post" model="ir.rule">
+      <field name="name">only own post</field>
+      <field ref="website_blog.model_blog_post" name="model_id"/>
+      <field name="domain_force">['|',('website_id.company_id.id','=',user.company_id.id),('website_id.company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
+    </record> -->
+
+
+    <record id="only_own_payment" model="ir.rule">
+      <field name="name">only own acquirer</field>
+      <field ref="payment.model_payment_acquirer" name="model_id"/>
+      <field name="domain_force">['|',('id','=',user.company_id.id),('id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.settings_plan_a'))]"/>
     </record>
 
     <record id="only_own_company" model="ir.rule">
       <field name="name">only own company</field>
       <field ref="base.model_res_company" name="model_id"/>
-      <field name="domain_force">['|',('id','=',user.company_ids[0].id),('id','=',False)]</field>
-      <field name="groups" eval="[(4, ref('tecnopti.group_plan_user'))]"/>
+      <field name="domain_force">['|',('id','=',user.company_id.id),('id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.settings_plan_a'))]"/>
     </record>
+
+    <record id="only_own_partner" model="ir.rule">
+      <field name="name">only own partner</field>
+      <field ref="base.model_res_partner" name="model_id"/>
+      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.sale_plan_a'))]"/>
+    </record>
+
+    <record id="only_own_product" model="ir.rule">
+      <field name="name">only own product</field>
+      <field ref="product.model_product_template" name="model_id"/>
+      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
+    </record>
+
+
+    <record id="only_own_carrier" model="ir.rule">
+      <field name="name">only own carrier</field>
+      <field ref="delivery.model_delivery_carrier" name="model_id"/>
+      <field name="domain_force">
+        ['|',('company_id','=',user.company_id.id),('company_id','=',False)]
+      </field>
+      <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
+    </record>
+
+    <function name="write" model="ir.model.data">
+          <!-- First we need to find the record...-->
+          <function name="search" model="ir.model.data">
+              <value
+                eval="[('module', '=', 'base'), ('name', '=', 'res_partner_rule_private_employee')]"
+                />
+          </function>
+         <!-- ...and temporarily set the noupdate field to False-->
+          <value eval="{'noupdate': False}" />
+      </function>
+<!-- ('|',('type', '!=', 'private'), ('type', '=', False)), -->
+      <!-- Security restriction for private addresses -->
+      <record id="base.res_partner_rule_private_employee" model="ir.rule">
+        <field name="name">res.partner.rule.private.employee</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="domain_force">
+          ['|',('company_id','=',user.company_id.id),('company_id','=',False)]
+        </field>
+        <field name="groups" eval="[
+          (4, ref('base.group_user')),
+          ]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="False"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+        </record>
+
+     <!-- (Optional) Time to clean our dirty hand, set the previously noupdate False to True again -->
+      <function name="write" model="ir.model.data">
+          <function name="search" model="ir.model.data">
+              <value
+                eval="[('module', '=', 'base'), ('name', '=', 'res_partner_rule_private_employee')]"
+                />
+          </function>
+          <value eval="{'noupdate': True}" />
+      </function>
 
   </data>
 </odoo>
