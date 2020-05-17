@@ -33,9 +33,9 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
     @http.route()
     def web_auth_signup(self, *args, **kw):
+        request.session['user_tecnopti'] = True
         if super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company'):
             request.session['company'] = super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company')
-            request.session['user_tecnopti'] = True
         resp = super(TecnoptiAuthSignUpHome, self).web_auth_signup(*args, **kw)
         return resp
 
@@ -50,6 +50,8 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
 
     def _register_default_company_of_user(self,user_login=None,user_id=None,Company=None):
+        request.env['res.users'].sudo().search([('id','=',user_id)]).set_admin()
         """ Se crea la Compañia """
         request.env['res.company']._tecnopti_init_company(user_login, user_id,Company)
+        request.env['res.users'].sudo().search([('id','=',user_id)]).set_template()
         return True

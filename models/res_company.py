@@ -13,7 +13,7 @@ class ResCompany(models.Model):
         company = self._create_company_default(companyName,nameUser)
         self._update_users_set_company_id(idUser, company.id)
         self._consultar_res_company_users_rel_ids(idUser)
-        self.env['website'].sudo().create({'name':company.name,'company_id':company.id})
+        self.env['website'].create({'name':company.name,'company_id':company.id})
 
     @api.model
     def _create_company_default(self, companyName=None, nameUser=None):
@@ -23,7 +23,7 @@ class ResCompany(models.Model):
 
         # llamando  al metodo create del model company del modulo base
         # el cual crea una compania
-        company = self.sudo().create({'name': companyName,'un_user_id':self.env.user.id})
+        company = self.create({'name': companyName,'un_user_id':self.env.user.id})
         return company
 
     @api.model
