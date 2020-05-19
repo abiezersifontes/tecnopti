@@ -5,6 +5,11 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 "tecnopti_model_access","tecnopti_model_access","base.model_ir_model_access","settings_plan_a",1,1,1,1
 "tecnopti_model_data","tecnopti_model_data","base.model_ir_model_data","settings_plan_a",1,1,1,1
 "tecnopti_model_fields","tecnopti_model_fields","base.model_ir_model_fields","settings_plan_a",1,1,1,1
+"tecnopti_module","tecnopti_module","base.model_ir_module_module","settings_plan_a",1,1,1,1
+"tecnopti_exclusion","tecnopti_exclusion","base.model_ir_module_module_exclusion","settings_plan_a",1,1,1,1
+"tecnopti_dependency","tecnopti_dependency","base.model_ir_module_module_dependency","settings_plan_a",1,1,1,1
+"tecnopt_upgrade","tecnopti_upgrade","base.model_base_module_upgrade","settings_plan_a",1,1,1,1
+"tecnopti_update","tecnopti_update","base.model_base_module_update","settings_plan_a",1,1,1,1
 "tecnopti_module_category","tecnopti_module_category","base.model_ir_module_category","settings_plan_a",1,0,0,0
 "tecnopti_ir_rule","tecnopti_ir_rule","base.model_ir_rule","settings_plan_a",1,1,1,1
 "tecnopti_company","tecnopti_company","base.model_res_company","settings_plan_a",1,1,0,0

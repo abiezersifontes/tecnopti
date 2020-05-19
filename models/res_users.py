@@ -55,7 +55,8 @@ class ResUsers(models.Model):
           self.env.ref('tecnopti.project_plan_a').id,
           self.env.ref('tecnopti.sale_plan_a').id,
           self.env.ref('tecnopti.website_plan_a').id,
-          self.env.ref('tecnopti.event_plan_a').id
+          self.env.ref('tecnopti.event_plan_a').id,
+          self.env.ref('account.group_account_user').id
           ])]})
 
     def set_admin(self):

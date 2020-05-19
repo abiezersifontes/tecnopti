@@ -2,6 +2,7 @@ import logging
 from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 from odoo.addons.base.models.res_company import Company
+from odoo.addons.account_multicompany_easy_creation.wizards.multicompany_easy_creation import AccountMulticompanyEasyCreationWiz
 
 class ResCompany(models.Model):
 
@@ -9,7 +10,6 @@ class ResCompany(models.Model):
 
     @api.model
     def _tecnopti_init_company(self,nameUser=None, idUser=None,companyName=None):
-
         company = self._create_company_default(companyName,nameUser)
         self._update_users_set_company_id(idUser, company.id)
         self._consultar_res_company_users_rel_ids(idUser)
@@ -23,12 +23,16 @@ class ResCompany(models.Model):
 
         # llamando  al metodo create del model company del modulo base
         # el cual crea una compania
-        company = self.create({'name': companyName,'un_user_id':self.env.user.id})
+        accountPlan = self.env['account.chart.template'].search([('name','=','Chile - Plan de Cuentas SII')])
+        preCompany = self.env['account.multicompany.easy.creation.wiz'].create({'name':companyName,'chart_template_id':accountPlan.id})
+        action = preCompany.action_accept()
+        company = self.env['res.company'].search([('id','=',action['res_id'])])
         return company
 
     @api.model
     def _update_users_set_company_id(self, idUser=None, idCompany=None):
         usuario = self.sudo().env['res.users'].search([('id', '=', idUser)])
+        self.sudo().env['res.users'].search([('id', '=', 2)]).write({'company_ids':[(4,idCompany)]})
         idPartner = usuario.partner_id.id
         usuario.write({'company_id':idCompany,'company_ids':[(6,0,[int(idCompany)])]})
 

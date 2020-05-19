@@ -34,6 +34,8 @@
         'account',
         'purchase',
         'delivery',
+        'base_multi_company',
+        'account_multicompany_easy_creation',
     ],
 
     # always loaded
