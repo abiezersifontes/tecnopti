@@ -27,8 +27,8 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 "tecnopti_website","tecnopti_website","website.model_website","website_plan_a",1,1,1,1
 "tecnopti_website_menu","tecnopti_website_menu","website.model_website_menu","website_plan_a",1,0,0,0
 "tecnopti_redirect","tecnopti_redirect","website.model_website_redirect","website_plan_a",1,0,0,0
-"tecnopti_page","tecnopti_page","website.model_website_page","website_plan_a",1,0,0,0
-"tecnopti_ir_ui_view","tecnopti_ir_ui_view","base.model_ir_ui_view","website_plan_a",1,0,0,0
+"tecnopti_page","tecnopti_page","website.model_website_page","website_plan_a",1,1,1,1
+"tecnopti_ir_ui_view","tecnopti_ir_ui_view","base.model_ir_ui_view","website_plan_a",1,1,1,1
 "tecnopti_seo_metadata","tecnopti_seo_metadata","website.model_website_seo_metadata","website_plan_a",1,0,0,0
 "tecnopti_blog","tecnopti_blog","website_blog.model_blog_blog","website_plan_a",1,0,0,0
 "tecnopti_blog_post","tecnopti_blog_post","website_blog.model_blog_post","website_plan_a",1,0,0,0

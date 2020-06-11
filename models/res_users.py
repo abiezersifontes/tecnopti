@@ -3,6 +3,8 @@ from odoo import api, fields, models
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
+    website_id = fields.Many2one('website') 
+
     # declaracion de constante de permiso de usuario por defecto
     _internal_user                   = 1
     _access_rights                   = 2
