@@ -13,14 +13,14 @@
       <field name="groups_id" eval="[(3,ref('base.group_user'))]"/>
     </record>
 
-    <!-- <record id="only_own_wesite" model="ir.rule">
+    <record id="only_own_wesite" model="ir.rule">
       <field name="name">only own website</field>
       <field ref="website.model_website" name="model_id"/>
       <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
     </record>
 
-    <record id="only_own_menu" model="ir.rule">
+    <!-- <record id="only_own_menu" model="ir.rule">
       <field name="name">only own menu</field>
       <field ref="website.model_website_menu" name="model_id"/>
       <field name="domain_force">['|',('website_id.company_id.id','=',user.company_id.id),('website_id.company_id','=',False)]</field>

@@ -24,7 +24,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 "tecnopti_tip","tecnopti_tip","digest.model_digest_tip","settings_plan_a",1,1,1,1
 "tecnopti_crm_team","tecnopti_crm_team","sales_team.model_crm_team","sale_plan_a",1,1,1,1
 "tecnopti_sales_team","tecnopti_sales_team","sale.model_sale_order","sale_plan_a",1,1,1,1
-"tecnopti_website","tecnopti_website","website.model_website","website_plan_a",1,0,0,0
+"tecnopti_website","tecnopti_website","website.model_website","website_plan_a",1,1,1,1
 "tecnopti_website_menu","tecnopti_website_menu","website.model_website_menu","website_plan_a",1,0,0,0
 "tecnopti_redirect","tecnopti_redirect","website.model_website_redirect","website_plan_a",1,0,0,0
 "tecnopti_page","tecnopti_page","website.model_website_page","website_plan_a",1,0,0,0
