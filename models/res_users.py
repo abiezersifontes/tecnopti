@@ -3,47 +3,16 @@ from odoo import api, fields, models
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    website_id = fields.Many2one('website') 
+    website_id = fields.Many2one('website')
 
-    # declaracion de constante de permiso de usuario por defecto
-    _internal_user                   = 1
-    _access_rights                   = 2
-    _settings_administration         = 3
-    _multi_companies                 = 4
-    _rechnical_features              = 6
-    _contact_creation                = 7
-    _user_portal                     = 9
-    _restricted_editor               = 12
-    _editor_and_designer             = 13
-    _user_project                    = 14
-    _manager_project                 = 15
-    _officer_employees               = 18
-    _manager_employees               = 19
-    _officer_attendance              = 20
-    _manager_attendance              = 21
-    _manual_attendance               = 22
-    _user_inventory                  = 34
-    _manager_inventory               = 35
-    _billing_accounting_Finance      = 42
-    #_tax_display_b2b                 = 43
-    _billing_manager	             = 46
-    _use_products_on_vendor_bills    = 50
-    _user_point_of_sale              = 51
-    _manager_point_of_Sale           = 52
-    _user_own_documents_only         = 53
-    _user_all_documents              = 54
-    _manager_sales                   = 55
-    _user_purchases                  = 64
-    _manager_purchases               = 65
-
-    #variable de tipo tupla para que los datos sean inmutable
-    _GROUPS_USERS = (
-        _internal_user, _access_rights, _settings_administration, _multi_companies, _rechnical_features, _contact_creation,
-        _restricted_editor, _editor_and_designer, _user_project, _manager_project, _officer_employees, _manager_employees,
-        _officer_attendance, _manager_attendance, _manual_attendance, _user_inventory, _manager_inventory,
-        _billing_accounting_Finance, _billing_manager, _use_products_on_vendor_bills, _user_point_of_sale,_manager_point_of_Sale,
-        _user_own_documents_only, _user_all_documents, _manager_sales, _user_purchases, _manager_purchases
-        )
+    def signup(self, values, token=None):
+        res = super(ResUsers,self).signup(values,token)
+        user_id = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
+        user_id.set_admin()
+        """ Se crea la Compañia """
+        self.env['res.company'].sudo()._tecnopti_init_company(user_id.login, user_id.id,None)
+        user_id.set_template()
+        return res
 
     @api.model
     def set_template(self):
@@ -96,30 +65,3 @@ class ResUsers(models.Model):
             self.env.ref('agreement.group_use_agreement_template').id,
             self.env.ref('agreement.group_use_agreement_type').id
         ])]})
-
-
-    @api.model
-    def _set_user_table_res_groups_users_rel(self, uid= None):
-
-        datos = self._verifique_user_table_res_groups_users_rel_gid_portal(uid)
-
-        if datos[0][0] == 1:
-            self._delete_permise_portal(uid)
-            self._set_create_permise(uid)
-            self.env.cache.invalidate()
-
-    @api.model
-    def _verifique_user_table_res_groups_users_rel_gid_portal(self, id= None):
-        self.env.cr.execute("select count(gid) from res_groups_users_rel where gid=%s and uid=%s;",(self._user_portal, id))
-        data = self.env.cr.fetchall()
-        return data
-
-    @api.multi
-    def _set_create_permise(self, id= None):
-
-        for i in self._GROUPS_USERS :
-            self.env.cr.execute("insert into res_groups_users_rel (gid,uid) values(%s, %s);",(i, id))
-
-    @api.model
-    def _delete_permise_portal(self, id= None):
-        self.env.cr.execute("delete from res_groups_users_rel where uid=%s and gid=%s;",(id,self._user_portal))

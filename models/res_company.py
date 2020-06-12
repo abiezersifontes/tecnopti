@@ -12,8 +12,8 @@ class ResCompany(models.Model):
     def _tecnopti_init_company(self,nameUser=None, idUser=None,companyName=None):
         company = self._create_company_default(companyName,nameUser)
         self._update_users_set_company_id(idUser, company.id)
-        self._consultar_res_company_users_rel_ids(idUser)
-        self.env['website'].create({'name':company.name,'company_id':company.id})
+        # self._consultar_res_company_users_rel_ids(idUser)
+        # self.sudo().env['website'].sudo().create({'name':company.name,'company_id':company.id})
 
     @api.model
     def _create_company_default(self, companyName=None, nameUser=None):
@@ -38,13 +38,10 @@ class ResCompany(models.Model):
 
         self._update_res_partner_company_id(idPartner,idCompany)
 
-
     @api.model
     def _update_res_partner_company_id(self,idPartner=None, idCompany=None):
         partner = self.env['res.partner'].search([('id','=',idPartner)])
         partner.write({'company_id':idCompany})
-
-
 
     @api.model
     def _consultar_res_company_users_rel_ids(self, idUser=None):
