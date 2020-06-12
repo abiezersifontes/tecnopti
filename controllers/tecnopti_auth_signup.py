@@ -21,21 +21,20 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
         # comprueba que el usuario sea un usuario por portar y tenga una session activa
         # y ejecuta los permisos de usuarios necesarios y crea la compañia
-        if request.httprequest.method == 'GET' and request.session.uid and request.params.get('redirect'):
-            if request.session.uid and request.session.user_tecnopti:
-                request.session['user_tecnopti'] = False
-                if request.session.company:
-                    company = request.session.company
-                else:
-                    company = None
-                self._register_default_company_of_user(request.session.login, request.session.uid,company)
+        if request.session.uid and request.session.user_tecnopti:
+            request.session['user_tecnopti'] = False
+            if request.session.company:
+                company = request.session.company
+            else:
+                company = None
+            self._register_default_company_of_user(request.session.login, request.session.uid,company)
 
         return response
 
     @http.route()
     def web_auth_signup(self, *args, **kw):
+        request.session['user_tecnopti'] = True
         if super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company'):
-            request.session['user_tecnopti'] = True
             request.session['company'] = super(TecnoptiAuthSignUpHome, self).get_auth_signup_qcontext().get('company')
         resp = super(TecnoptiAuthSignUpHome, self).web_auth_signup(*args, **kw)
         return resp
