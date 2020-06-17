@@ -1,17 +1,21 @@
 from odoo import api, fields, models
+import logging
+_logger = logging.getLogger(__name__)
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    website_id = fields.Many2one('website')
+    website_ids = fields.Many2many('website')
 
     def signup(self, values, token=None):
         res = super(ResUsers,self).signup(values,token)
         user_id = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
         user_id.set_admin()
         """ Se crea la Compañia """
-        self.env['res.company'].sudo()._tecnopti_init_company(user_id.login, user_id.id,None)
-        user_id.set_template()
+        company = self.env['res.company'].sudo()._tecnopti_init_company(user_id.login, user_id.id,None)
+        w_id = self.env['website'].sudo().create({'name':company.name,'company_id':company.id})
+        user_id.write({'website_ids':[(6, 0, [w_id.id])]})
+        # user_id.set_template()
         return res
 
     @api.model

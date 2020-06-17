@@ -20,7 +20,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 "tecnopti_nomenclature","tecnopti_nomenclature","barcodes.model_barcode_nomenclature","settings_plan_a",1,1,1,1
 "tecnopti_barcode_rule","tecnopti_barcode_rule","barcodes.model_barcode_rule","settings_plan_a",1,1,1,1
 "tecnopti_digest","tecnopti_digest","digest.model_digest_digest","settings_plan_a",1,1,1,1
-"tecnopti_payment","tecnopti_payment","payment.model_payment_acquirer","settings_plan_a",1,0,0,0
+"tecnopti_payment","tecnopti_payment","payment.model_payment_acquirer","settings_plan_a",1,1,1,0
 "tecnopti_tip","tecnopti_tip","digest.model_digest_tip","settings_plan_a",1,1,1,1
 "tecnopti_crm_team","tecnopti_crm_team","sales_team.model_crm_team","sale_plan_a",1,1,1,1
 "tecnopti_sales_team","tecnopti_sales_team","sale.model_sale_order","sale_plan_a",1,1,1,1

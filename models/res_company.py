@@ -14,6 +14,7 @@ class ResCompany(models.Model):
         self._update_users_set_company_id(idUser, company.id)
         # self._consultar_res_company_users_rel_ids(idUser)
         # self.sudo().env['website'].sudo().create({'name':company.name,'company_id':company.id})
+        return company
 
     @api.model
     def _create_company_default(self, companyName=None, nameUser=None):

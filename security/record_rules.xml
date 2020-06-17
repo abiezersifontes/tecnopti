@@ -2,31 +2,31 @@
 <odoo>
   <data>
 
-    <!-- <menuitem name="Website"
+    <menuitem name="Website"
     id="website.menu_website_configuration"
     sequence="9"
-    groups="base.user_root,base.user_admin"
-    web_icon="website,static/description/icon.png"/> -->
+    groups="base.user_root,base.user_admin,base.group_user"
+    web_icon="website,static/description/icon.png"/>
 
 
     <!-- <record id="website.menu_website_configuration" model="ir.ui.menu">
       <field name="groups_id" eval="[(3,ref('base.group_user'))]"/>
     </record> -->
 
-    <!--<record id="only_own_wesite" model="ir.rule">
+    <record id="only_own_wesite" model="ir.rule">
       <field name="name">only own website</field>
       <field ref="website.model_website" name="model_id"/>
       <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
-    </record>
 
+    </record>
     <record id="only_own_wesite_page" model="ir.rule">
       <field name="name">only own website page</field>
       <field ref="website.model_website_page" name="model_id"/>
-      <field name="domain_force">['|',('website_id','=',user.website_id.id),('website_id','=',False)]</field>
+      <field name="domain_force">['|',('website_id','in',user.website_ids.mapped('id')),('website_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
-      <field name="perm_read" eval="0"/>
     </record>
+    <!--
 
     <record id="only_own_menu" model="ir.rule">
       <field name="name">only own menu</field>
@@ -47,13 +47,14 @@
       <field ref="website_blog.model_blog_post" name="model_id"/>
       <field name="domain_force">['|',('website_id.company_id.id','=',user.company_id.id),('website_id.company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
-    </record> -->
+    </record>
 
+  -->
 
     <record id="only_own_payment" model="ir.rule">
       <field name="name">only own acquirer</field>
       <field ref="payment.model_payment_acquirer" name="model_id"/>
-      <field name="domain_force">['|',('id','=',user.company_id.id),('id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.settings_plan_a'))]"/>
     </record>
 
