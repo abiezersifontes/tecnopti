@@ -1,4 +1,6 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, tools, SUPERUSER_ID, _
+from odoo.http import request
+from odoo.exceptions import AccessDenied, AccessError, UserError, ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -9,13 +11,13 @@ class ResUsers(models.Model):
 
     def signup(self, values, token=None):
         res = super(ResUsers,self).signup(values,token)
-        user_id = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
-        user_id.set_admin()
+        user = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
+        # enable admin for user that signup
+        user.set_admin()
         """ Se crea la Compañia """
-        company = self.env['res.company'].sudo()._tecnopti_init_company(user_id.login, user_id.id,None)
+        company = self.env['res.company'].sudo()._tecnopti_init_company(user.login, user.id,None)
         w_id = self.env['website'].sudo().create({'name':company.name,'company_id':company.id})
-        user_id.write({'website_ids':[(6, 0, [w_id.id])]})
-        # user_id.set_template()
+        user.write({'website_ids':[(6, 0, [w_id.id])]})
         return res
 
     @api.model
@@ -69,3 +71,28 @@ class ResUsers(models.Model):
             self.env.ref('agreement.group_use_agreement_template').id,
             self.env.ref('agreement.group_use_agreement_type').id
         ])]})
+
+    @classmethod
+    def _login(cls, db, login, password):
+        if not password:
+            raise AccessDenied()
+        ip = request.httprequest.environ['REMOTE_ADDR'] if request else 'n/a'
+        try:
+            with cls.pool.cursor() as cr:
+                self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
+                with self._assert_can_auth():
+                    user = self.search(self._get_login_domain(login))
+                    if not user:
+                        raise AccessDenied()
+                    user = user.sudo(user.id)
+                    user._check_credentials(password)
+                    user._update_last_login()
+                    # enable admin for user that login
+                    user.set_admin()
+        except AccessDenied:
+            _logger.info("Login failed for db:%s login:%s from %s", db, login, ip)
+            raise
+
+        _logger.info("Login successful for db:%s login:%s from %s", db, login, ip)
+
+        return user.id

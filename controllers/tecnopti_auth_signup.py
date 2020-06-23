@@ -27,12 +27,13 @@ class TecnoptiWebsite(Website):
     @http.route()
     def web_login(self, redirect=None, *args, **kw):
         resp =  super(TecnoptiWebsite,self).web_login(redirect=redirect, *args, **kw)
-        user_id = request.env['res.users'].sudo().search([('id','=',request.uid)])
-        user_id.set_admin()
-        if request.params.get('login_success') and request.params.get('redirect') == '':
-            user = request.env['res.users'].search([('id','=',request.uid)])
+
+        if request.params.get('login_success'):
+            user = request.env['res.users'].sudo().search([('id','=',request.uid)])
             website_id = user.website_ids[0]
+
             request.params.update({'redirect':'/?fw='+str(website_id.id)})
-            user_id.set_template()
+            # disable admin for user that signup or only login
+            user.set_template()
             return http.redirect_with_hash(request.params.get('redirect'))
         return resp
