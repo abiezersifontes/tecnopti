@@ -12,6 +12,13 @@ class ResUsers(models.Model):
     def signup(self, values, token=None):
         res = super(ResUsers,self).signup(values,token)
         user = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
+        _logger.warning("##################################################################")
+        _logger.warning("##################################################################")
+        _logger.warning("##################################################################")
+        _logger.error(values)
+        _logger.warning("##################################################################")
+        _logger.warning("##################################################################")
+        _logger.warning("##################################################################")
         # enable admin for user that signup
         user.set_admin()
         """ Se crea la Compañia """

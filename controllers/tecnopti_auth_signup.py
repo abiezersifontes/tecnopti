@@ -33,7 +33,9 @@ class TecnoptiWebsite(Website):
             website_id = user.website_ids[0]
 
             request.params.update({'redirect':'/?fw='+str(website_id.id)})
-            # disable admin for user that signup or only login
-            user.set_template()
+
+            if not user.id in [1,2]:
+                # disable admin for user that signup or only login oly if don't admin
+                user.set_template()
             return http.redirect_with_hash(request.params.get('redirect'))
         return resp
