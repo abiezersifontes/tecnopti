@@ -22,11 +22,26 @@ class TecnoptiAuthSignUpHome(AuthSignupHome):
 
         return qcontext
 
+    def do_signup(self, qcontext):
+        """ Shared helper that creates a res.partner out of a token """
+        values = { key: qcontext.get(key) for key in ('login', 'name', 'password') }
+        if not values:
+            raise UserError(_("The form was not properly filled in."))
+        if values.get('password') != qcontext.get('confirm_password'):
+            raise UserError(_("Passwords do not match; please retype them."))
+        supported_langs = [lang['code'] for lang in request.env['res.lang'].sudo().search_read([], ['code'])]
+        if request.lang in supported_langs:
+            values['lang'] = request.lang
+        if qcontext.get('company'):
+            values['company_name'] = qcontext.get('company')
+        self._signup_with_values(qcontext.get('token'), values)
+        request.env.cr.commit()
+
 class TecnoptiWebsite(Website):
 
     @http.route()
     def web_login(self, redirect=None, *args, **kw):
-        resp =  super(TecnoptiWebsite,self).web_login(redirect=redirect, *args, **kw)
+        resp = super(TecnoptiWebsite,self).web_login(redirect=redirect, *args, **kw)
 
         if request.params.get('login_success'):
             user = request.env['res.users'].sudo().search([('id','=',request.uid)])

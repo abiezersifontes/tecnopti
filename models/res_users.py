@@ -2,6 +2,10 @@ from odoo import api, fields, models, tools, SUPERUSER_ID, _
 from odoo.http import request
 from odoo.exceptions import AccessDenied, AccessError, UserError, ValidationError
 import logging
+import requests
+import json
+import string
+import random
 _logger = logging.getLogger(__name__)
 
 class ResUsers(models.Model):
@@ -12,18 +16,34 @@ class ResUsers(models.Model):
     def signup(self, values, token=None):
         res = super(ResUsers,self).signup(values,token)
         user = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
-        _logger.warning("##################################################################")
-        _logger.warning("##################################################################")
-        _logger.warning("##################################################################")
-        _logger.error(values)
-        _logger.warning("##################################################################")
-        _logger.warning("##################################################################")
-        _logger.warning("##################################################################")
         # enable admin for user that signup
         user.set_admin()
         """ Se crea la Compañia """
-        company = self.env['res.company'].sudo()._tecnopti_init_company(user.login, user.id,None)
-        w_id = self.env['website'].sudo().create({'name':company.name,'company_id':company.id})
+        if values.get('company_name'):
+            company_name = values.get('company_name')
+        else:
+            company_name = None
+
+        aleatory = ''.join(random.choice(string.ascii_lowercase) for i in range(8))
+        host = aleatory+company_name+'.openti.cl'
+        datos = json.dumps({'hostname':host.lower(), 'ip':'200.54.7.203', 'ttl':'86400'})
+        resp_domain = requests.post('https://apidns.servidoresdominio.cl/dns', data=datos, headers={'Content-Type':'aplication/json','X-Api-Key':'3b0009de53d5c5128fea6cf879ca0ae346dccb8e3cb27f1ab54c0de1b934907d'})
+        # url_base = self.env['ir.config_parameter'].sudo().get_param('web.base.url').replace("http://","").replace("https://","")
+        # _logger.warning("##################################################")
+        # _logger.warning("##################################################")
+        # _logger.warning("##################################################")
+        # _logger.info(url_base)
+        # _logger.warning("##################################################")
+        # _logger.warning("##################################################")
+        # _logger.warning("##################################################")
+        # if url_base != -1:
+        #     pass
+        if resp_domain.json()['code'] == 200:
+            domain = host.lower()
+        else:
+            domain = ''
+        company = self.env['res.company'].sudo()._tecnopti_init_company(user.login, user.id,company_name)
+        w_id = self.env['website'].sudo().create({'name':company.name,'company_id':company.id,'domain':domain})
         user.write({'website_ids':[(6, 0, [w_id.id])]})
         return res
 
