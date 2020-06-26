@@ -46,7 +46,7 @@ class ResUsers(models.Model):
         w_id = self.env['website'].sudo().create({'name':company.name,'company_id':company.id,'domain':domain})
         user.write({'website_ids':[(6, 0, [w_id.id])]})
         return res
-
+# is753159
     @api.model
     def set_template(self):
         self.write({'groups_id':[(6, 0, [
@@ -55,7 +55,6 @@ class ResUsers(models.Model):
           self.env.ref('tecnopti.pos_plan_a').id,
           self.env.ref('tecnopti.purchase_plan_a').id,
           self.env.ref('tecnopti.account_plan_a').id,
-          self.env.ref('account.group_show_line_subtotals_tax_included').id,
           self.env.ref('tecnopti.stock_plan_a').id,
           self.env.ref('tecnopti.project_plan_a').id,
           self.env.ref('tecnopti.sale_plan_a').id,
@@ -63,6 +62,7 @@ class ResUsers(models.Model):
           self.env.ref('tecnopti.event_plan_a').id,
           self.env.ref('account.group_account_user').id
           ])]})
+#          self.env.ref('account.group_show_line_subtotals_tax_included').id,
 
     def set_admin(self):
         self.write({'groups_id':[(6, 0, [
@@ -86,7 +86,6 @@ class ResUsers(models.Model):
             self.env.ref('stock.group_stock_multi_locations').id,
             self.env.ref('uom.group_uom').id,
             self.env.ref('stock.group_tracking_lot').id,
-            self.env.ref('account.group_show_line_subtotals_tax_included').id,
             self.env.ref('stock.group_lot_on_delivery_slip').id,
             self.env.ref('account.group_account_user').id,
             self.env.ref('crm.group_use_lead').id,
@@ -99,6 +98,7 @@ class ResUsers(models.Model):
             self.env.ref('agreement.group_use_agreement_template').id,
             self.env.ref('agreement.group_use_agreement_type').id
         ])]})
+#            self.env.ref('account.group_show_line_subtotals_tax_included').id,
 
     @classmethod
     def _login(cls, db, login, password):
