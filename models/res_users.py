@@ -6,6 +6,7 @@ import requests
 import json
 import string
 import random
+import socket
 _logger = logging.getLogger(__name__)
 
 class ResUsers(models.Model):
@@ -24,20 +25,15 @@ class ResUsers(models.Model):
         else:
             company_name = None
 
+        url_base = self.env['ir.config_parameter'].sudo().get_param('web.base.url').replace("http://","").replace("https://","")
+        if url_base.find(':') != -1:
+            url_base = url_base.split(':')[0]
         aleatory = ''.join(random.choice(string.ascii_lowercase) for i in range(8))
-        host = aleatory+company_name+'.openti.cl'
-        datos = json.dumps({'hostname':host.lower(), 'ip':'200.54.7.203', 'ttl':'86400'})
+        host = aleatory + company_name.lower() + url_base
+        ip = socket.gethostbyname(url_base)
+        datos = json.dumps({'hostname':host, 'ip':ip, 'ttl':'86400'})
         resp_domain = requests.post('https://apidns.servidoresdominio.cl/dns', data=datos, headers={'Content-Type':'aplication/json','X-Api-Key':'3b0009de53d5c5128fea6cf879ca0ae346dccb8e3cb27f1ab54c0de1b934907d'})
-        # url_base = self.env['ir.config_parameter'].sudo().get_param('web.base.url').replace("http://","").replace("https://","")
-        # _logger.warning("##################################################")
-        # _logger.warning("##################################################")
-        # _logger.warning("##################################################")
-        # _logger.info(url_base)
-        # _logger.warning("##################################################")
-        # _logger.warning("##################################################")
-        # _logger.warning("##################################################")
-        # if url_base != -1:
-        #     pass
+
         if resp_domain.json()['code'] == 200:
             domain = host.lower()
         else:
