@@ -34,7 +34,15 @@ class ResUsers(models.Model):
         ip = socket.gethostbyname(url_base)
         datos = json.dumps({'hostname':host, 'ip':ip, 'ttl':'86400'})
         resp_domain = requests.post('https://apidns.servidoresdominio.cl/dns', data=datos, headers={'Content-Type':'aplication/json','X-Api-Key':'3b0009de53d5c5128fea6cf879ca0ae346dccb8e3cb27f1ab54c0de1b934907d'})
-
+        _logger.warning("####################################################################")
+        _logger.warning("####################################################################")
+        _logger.warning("####################################################################")
+        _logger.warning("####################################################################")
+        _logger.warning(datos)
+        _logger.warning("####################################################################")
+        _logger.warning("####################################################################")
+        _logger.warning("####################################################################")
+        _logger.warning("####################################################################")
         if resp_domain.json()['code'] == 200:
             domain = host.lower()
             if ip != '200.54.7.203':
