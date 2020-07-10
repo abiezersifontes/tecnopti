@@ -30,8 +30,11 @@ class ResUsers(models.Model):
         if url_base.find(':') != -1:
             url_base = url_base.split(':')[0]
         aleatory = ''.join(random.choice(string.ascii_lowercase) for i in range(8))
-        host = aleatory + company_name.lower() + "." + url_base
-        ip = socket.gethostbyname(url_base)
+        host = company_name.lower() + aleatory + "." + url_base
+        if url_base == "dev.openti.cl":
+            ip = "200.54.7.199"
+        else:
+            ip = socket.gethostbyname(url_base)
         datos = json.dumps({'hostname':host, 'ip':ip, 'ttl':'86400'})
         resp_domain = requests.post('https://apidns.servidoresdominio.cl/dns', data=datos, headers={'Content-Type':'aplication/json','X-Api-Key':'3b0009de53d5c5128fea6cf879ca0ae346dccb8e3cb27f1ab54c0de1b934907d'})
         _logger.warning("####################################################################")
