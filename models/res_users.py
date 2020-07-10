@@ -7,6 +7,7 @@ import json
 import string
 import random
 import socket
+import base64
 _logger = logging.getLogger(__name__)
 
 class ResUsers(models.Model):
@@ -36,6 +37,8 @@ class ResUsers(models.Model):
 
         if resp_domain.json()['code'] == 200:
             domain = host.lower()
+            if ip != '200.54.7.203':
+                self.create_https(domain)
         else:
             domain = ''
         company = self.env['res.company'].sudo()._tecnopti_init_company(user.login, user.id,company_name)
@@ -120,3 +123,40 @@ class ResUsers(models.Model):
         _logger.info("Login successful for db:%s login:%s from %s", db, login, ip)
 
         return user.id
+
+    def create_https(self,domain='',branch='develop'):
+        if branch!="develop":
+            file="docker-compose.yaml"
+        else:
+            file="docker-compose-develop.yaml"
+        url_get = 'https://gitlab.com/api/v4/projects/18472771/repository/files/'+file
+        url_up = 'https://gitlab.com/api/v4/projects/18472771/repository/commits'
+        head = {"PRIVATE-TOKEN":"EQpMozy5GuumgsX7JLyG","Content-Type":"application/json"}
+        #gKCr4rHFTVKghFdTory1
+        para = {'ref':branch}
+
+        if branch == "master":
+            divided = 'www.openti.cl'
+        else:
+            divided = 'dev.openti.cl'
+        #base64.b64decode(requests.get(url_get,headers=head,params=para).json()['content'])
+        text = base64.b64decode(
+            requests.get(
+                url_get,
+                headers=head,
+                params=para).json()['content']).decode('UTF-8').split("=" + divided)
+        text_up = text[0] + "=" + domain + ',' + divided + text[1] + "=" + domain + ',' + divided + text[2]
+
+        for_commit = json.dumps({
+            "branch":branch,
+            "commit_message":"commit created by odooBot2",
+            "actions":[
+                {
+                    "action":"update",
+                    "file_path":file,
+                    "content": text_up
+                }
+            ]
+        })
+        resp = requests.post(url_up,headers=head,data=for_commit)
+        return resp
