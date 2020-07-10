@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import api, fields, models, tools, SUPERUSER_ID, _
 from odoo.http import request
 from odoo.exceptions import AccessDenied, AccessError, UserError, ValidationError
