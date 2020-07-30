@@ -16,6 +16,8 @@ class ResUsers(models.Model):
 
     website_ids = fields.Many2many('website')
 
+
+
     def signup(self, values, token=None):
         res = super(ResUsers,self).signup(values,token)
         user = self.env['res.users'].sudo().search([('login','=',values.get('login'))])

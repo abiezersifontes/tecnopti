@@ -36,6 +36,9 @@
         'delivery',
         'base_multi_company',
         'account_multicompany_easy_creation',
+        'agreement_legal',
+        'crm',
+        'fleet',
     ],
 
     # always loaded
@@ -49,6 +52,7 @@
         'views/tecnopti_website_homepage_s_comparisons_template.xml',
         'views/tecnopti_res_company_views.xml',
         'views/res_user.xml',
+        'data/website_data.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
