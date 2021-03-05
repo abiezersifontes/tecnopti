@@ -17,7 +17,6 @@ class ResUsers(models.Model):
     website_ids = fields.Many2many('website')
 
 
-
     def signup(self, values, token=None):
         res = super(ResUsers,self).signup(values,token)
         user = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
@@ -34,25 +33,18 @@ class ResUsers(models.Model):
             url_base = url_base.split(':')[0]
         aleatory = ''.join(random.choice(string.ascii_lowercase) for i in range(8))
         host = company_name.lower() + aleatory + "." + url_base
+        """
         if url_base == "dev.openti.cl":
             ip = "200.54.7.199"
         else:
             ip = socket.gethostbyname(url_base)
+        """
+        ip = self.env['ir.config_parameter'].sudo().get_param('tecnopti.ip')
         datos = json.dumps({'hostname':host, 'ip':ip, 'ttl':'86400'})
         resp_domain = requests.post('https://apidns.servidoresdominio.cl/dns', data=datos, headers={'Content-Type':'aplication/json','X-Api-Key':'3b0009de53d5c5128fea6cf879ca0ae346dccb8e3cb27f1ab54c0de1b934907d'})
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning(datos)
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
         if resp_domain.json()['code'] == 200:
             domain = host.lower()
-            if ip != '200.54.7.203':
-                self.create_https(domain)
+            #self.create_https(domain)
         else:
             domain = ''
         company = self.env['res.company'].sudo()._tecnopti_init_company(user.login, user.id,company_name)
@@ -159,15 +151,6 @@ class ResUsers(models.Model):
                 url_get,
                 headers=head,
                 params=para).json()['content']).decode('UTF-8').split("=" + divided)
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning(text)
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
         text_up = text[0] + "=" + domain + ',' + divided + text[1] + "=" + domain + ',' + divided + text[2]
 
         for_commit = json.dumps({

@@ -52,6 +52,7 @@
         'views/tecnopti_website_homepage_s_comparisons_template.xml',
         'views/tecnopti_res_company_views.xml',
         'views/res_user.xml',
+        'views/res_config_settings.xml',
         'data/website_data.xml',
     ],
     # only loaded in demonstration mode
