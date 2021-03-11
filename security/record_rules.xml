@@ -17,9 +17,15 @@
       <field ref="website.model_website" name="model_id"/>
       <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
-
     </record>
-
+        
+    <record id="only_my_own_tax" model="ir.rule">
+      <field name="name">only own tax</field>
+      <field ref="account.model_account_tax" name="model_id"/>
+      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="groups" eval="[(4, ref('tecnopti.account_plan_a'))]"/>
+    </record>
+    
 <!--    <record id="only_own_journal" model="ir.rule">-->
 <!--      <field name="name">only own journal</field>-->
 <!--      <field ref="account.model_account_journal" name="model_id"/>-->
