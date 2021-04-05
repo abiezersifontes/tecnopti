@@ -15,14 +15,14 @@
     <record id="only_own_wesite" model="ir.rule">
       <field name="name">only own website</field>
       <field ref="website.model_website" name="model_id"/>
-      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.website_plan_a'))]"/>
     </record>
         
     <record id="only_my_own_tax" model="ir.rule">
       <field name="name">only own tax</field>
       <field ref="account.model_account_tax" name="model_id"/>
-      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.account_plan_a'))]"/>
     </record>
     
@@ -80,28 +80,28 @@ while parsing /home/abiezer/PycharmProjects/openti/openti_image/localization_ope
     <record id="only_own_payment" model="ir.rule">
       <field name="name">only own acquirer</field>
       <field ref="payment.model_payment_acquirer" name="model_id"/>
-      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.settings_plan_a'))]"/>
     </record>
 
     <record id="only_own_company" model="ir.rule">
       <field name="name">only own company</field>
       <field ref="base.model_res_company" name="model_id"/>
-      <field name="domain_force">['|',('id','=',user.company_id.id),('id','=',False)]</field>
+      <field name="domain_force">['|',('id','in',user.company_ids.mapped('id')),('id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.settings_plan_a'))]"/>
     </record>
 
     <record id="only_own_partner" model="ir.rule">
       <field name="name">only own partner</field>
       <field ref="base.model_res_partner" name="model_id"/>
-      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.sale_plan_a'))]"/>
     </record>
 
     <record id="only_own_product" model="ir.rule">
       <field name="name">only own product</field>
       <field ref="product.model_product_template" name="model_id"/>
-      <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','in',user.company_id.id),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
     </record>
 
@@ -110,7 +110,7 @@ while parsing /home/abiezer/PycharmProjects/openti/openti_image/localization_ope
       <field name="name">only own carrier</field>
       <field ref="delivery.model_delivery_carrier" name="model_id"/>
       <field name="domain_force">
-        ['|',('company_id','=',user.company_id.id),('company_id','=',False)]
+        ['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]
       </field>
       <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
     </record>
@@ -131,7 +131,7 @@ while parsing /home/abiezer/PycharmProjects/openti/openti_image/localization_ope
         <field name="name">res.partner.rule.private.employee</field>
         <field name="model_id" ref="base.model_res_partner"/>
         <field name="domain_force">
-          ['|',('company_id','=',user.company_id.id),('company_id','=',False)]
+          ['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]
         </field>
         <field name="groups" eval="[
           (4, ref('base.group_user')),
@@ -153,4 +153,4 @@ while parsing /home/abiezer/PycharmProjects/openti/openti_image/localization_ope
       </function>
 
   </data>
-</odoo>
+    </odoo>
