@@ -101,7 +101,7 @@ while parsing /home/abiezer/PycharmProjects/openti/openti_image/localization_ope
     <record id="only_own_product" model="ir.rule">
       <field name="name">only own product</field>
       <field ref="product.model_product_template" name="model_id"/>
-      <field name="domain_force">['|',('company_id','in',user.company_id.id),('company_id','=',False)]</field>
+      <field name="domain_force">['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]</field>
       <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
     </record>
 
@@ -114,6 +114,25 @@ while parsing /home/abiezer/PycharmProjects/openti/openti_image/localization_ope
       </field>
       <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
     </record>
+
+    <record id="only_own_scrap" model="ir.rule">
+      <field name="name">only own scrap</field>
+      <field ref="stock.model_stock_scrap" name="model_id"/>
+      <field name="domain_force">
+        ['|',('product_id.company_id','in',user.company_ids.mapped('id')),('product_id.company_id','=',False)]
+      </field>
+      <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
+    </record>
+    
+    <record id="only_own_consumo" model="ir.rule">
+      <field name="name">only own consumo</field>
+      <field ref="l10n_cl_fe.model_account_move_consumo_folios" name="model_id"/>
+      <field name="domain_force">
+        ['|',('company_id','in',user.company_ids.mapped('id')),('company_id','=',False)]
+      </field>
+      <field name="groups" eval="[(4, ref('tecnopti.stock_plan_a'))]"/>
+    </record>
+ 
 
     <function name="write" model="ir.model.data">
           <!-- First we need to find the record...-->
