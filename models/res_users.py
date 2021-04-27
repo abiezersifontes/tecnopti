@@ -22,13 +22,16 @@ class ResUsers(models.Model):
         res = super(ResUsers,self).signup(values,token)
         user = self.env['res.users'].sudo().search([('login','=',values.get('login'))])
         # enable admin for user that signup
-        user.set_admin()
+        #user.set_admin()
         """ Se crea la Compañia """
         if values.get('company_name'):
             company_name = values.get('company_name')
         else:
             company_name = None
 
+        self.env['res.company'].sudo().create({'name':company_name})
+        self.env.sudo().cr.commit()
+        """
         url_base = self.env['ir.config_parameter'].sudo().get_param('web.base.url').replace("http://","").replace("https://","")
         if url_base.find(':') != -1:
             url_base = url_base.split(':')[0]
@@ -40,26 +43,20 @@ class ResUsers(models.Model):
             ip = socket.gethostbyname(url_base)
         datos = json.dumps({'hostname':host, 'ip':ip, 'ttl':'86400'})
         resp_domain = requests.post('https://apidns.servidoresdominio.cl/dns', data=datos, headers={'Content-Type':'aplication/json','X-Api-Key':'3b0009de53d5c5128fea6cf879ca0ae346dccb8e3cb27f1ab54c0de1b934907d'})
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning(datos)
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
-        _logger.warning("####################################################################")
         if resp_domain.json()['code'] == 200:
             domain = host.lower()
             if ip != '200.54.7.203':
                 self.create_https(domain)
         else:
             domain = ''
+        
         company = self.env['res.company'].sudo()._tecnopti_init_company(user.login, user.id,company_name)
         w_id = self.env['website'].sudo().create({'name':company.name,'company_id':company.id,'domain':domain})
         user.write({'website_ids':[(6, 0, [w_id.id])]})
+        """
         return res
 # is753159
+    """
     @api.model
     def set_template(self):
         self.write({'groups_id':[(6, 0, [
@@ -76,7 +73,7 @@ class ResUsers(models.Model):
           self.env.ref('account.group_account_user').id
           ])]})
 #          self.env.ref('account.group_show_line_subtotals_tax_included').id,
-
+    
     def set_admin(self):
         self.write({'groups_id':[(6, 0, [
             self.env.ref('account.group_account_manager').id,
@@ -183,3 +180,4 @@ class ResUsers(models.Model):
         })
         resp = requests.post(url_up,headers=head,data=for_commit)
         return resp
+    """
